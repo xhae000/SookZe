@@ -1,13 +1,13 @@
-package com.woojin.lezhin;
+package com.woojin.sookje;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class LezhinApplication {
+@SpringBootApplication  
+public class SookjeApplication2 {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LezhinApplication.class, args);
+		SpringApplication.run(SookjeApplication2.class, args);
 	}
 
 }

@@ -1,20 +1,17 @@
-package com.woojin.lezhin.Controller;
+package com.woojin.sookje.Lezhin.Controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.woojin.sookje.Lezhin.Repository.FollowRepository;
 
-import com.woojin.lezhin.Entity.FollowEntity;
-import com.woojin.lezhin.Repository.FollowRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @RestController
-public class Controller {
+public class LezhinController {
     FollowRepository followRepository;
 
-    public Controller (FollowRepository followRepository){
+    public LezhinController (FollowRepository followRepository){
         this.followRepository = followRepository;
     }
 

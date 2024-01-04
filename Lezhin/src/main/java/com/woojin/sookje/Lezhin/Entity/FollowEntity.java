@@ -1,14 +1,18 @@
-package com.woojin.lezhin.Entity;
+package com.woojin.sookje.Lezhin.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.ToString;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 @Entity
 @ToString
+@AllArgsConstructor
+@Builder
 public class FollowEntity{
     public FollowEntity(Long followerId, Long targetId){
         this.followerId = followerId;
