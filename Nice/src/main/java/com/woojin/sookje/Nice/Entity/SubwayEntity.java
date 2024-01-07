@@ -5,12 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access =  AccessLevel.PROTECTED)
 @Getter
 public class SubwayEntity {
     @Id
@@ -21,13 +22,13 @@ public class SubwayEntity {
     @Column(name = "line", nullable = false, updatable = true)
     int line;   
 
-    @Column(name = "subwayNum", nullable = false, updatable = true)
+    @Column(name = "subway_num", nullable = false, updatable = true)
     int subwayNum;
 
-    @Column(name = "subwayName", nullable = false, updatable = true)
+    @Column(name = "subway_name", nullable = false, updatable = true)
     String subwayName;
 
-    @Column(name = "peopleCnt", nullable = false, updatable = false)
+    @Column(name = "people_cnt", nullable = false, updatable = false)
     int peopleCnt;
 
     @Column(name = "date", nullable = false, updatable = false)

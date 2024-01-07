@@ -10,4 +10,4 @@ public class SookjeApplication2 {
 		SpringApplication.run(SookjeApplication2.class, args);
 	}
 
-}
+}	
