@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import com.woojin.sookje.Nice.DTO.AveragePeopleDTO;
 import com.woojin.sookje.Nice.DTO.SubwayDTO;
 import com.woojin.sookje.Nice.Entity.SubwayEntity;
 import com.woojin.sookje.Nice.Repository.SubwayRepository;
@@ -55,5 +56,10 @@ public class SubwayServiceImpl implements SubwayService{
         
     }
 
-
+    @Override
+    public List<AveragePeopleDTO> findMost10AvgSubway() {
+        return subwayRepository.findMost10Subways().get().stream()
+            .map(s -> new AveragePeopleDTO(s.getSubway_name(), s.getAvg_people_cnt()))
+            .collect(Collectors.toList()); // 모듈화    
+     }
 }

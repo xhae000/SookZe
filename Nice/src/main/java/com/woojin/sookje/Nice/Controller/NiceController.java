@@ -7,6 +7,8 @@ import com.woojin.sookje.Nice.Service.SubwayService;
 import java.io.IOException;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -17,12 +19,20 @@ public class NiceController {
         this.subwayService = subwayService;
     }
 
+    /**
+     * 데이터파일의 각 레코드를 DB에 저장하는 API
+     * @throws IOException
+     */
     @GetMapping("/nice/createDB")
-    public String createDatabase(){
-        try {
-            return subwayService.createSubwayDatabase().toString();
-        } catch (IOException e) {
-            return "error ...";
-        }
+    public String createDatabase() throws IOException{
+        return subwayService.createSubwayDatabase().toString();
     }
+
+    @GetMapping("/nice/getMost10Average")
+    public String getMethodName() {
+        return subwayService.findMost10AvgSubway().toString();
+    }
+    
+
+
 }
