@@ -14,7 +14,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.woojin.sookje.Nice.DTO.AveragePeopleDTO;
+import com.woojin.sookje.Nice.DTO.PeopleGapDTO;
 import com.woojin.sookje.Nice.DTO.SubwayDTO;
+import com.woojin.sookje.Nice.Entity.AveragePeopleInterface;
+import com.woojin.sookje.Nice.Entity.PeopleGapInterface;
 import com.woojin.sookje.Nice.Entity.SubwayEntity;
 import com.woojin.sookje.Nice.Repository.SubwayRepository;
 import com.woojin.sookje.Nice.Service.SubwayService;
@@ -32,7 +35,7 @@ public class SubwayServiceImpl implements SubwayService{
         if(subwayRepository.countBy() > 0) 
             return subwayRepository.findAll().stream()
                     .map(SubwayDTO::new)
-                    .collect(Collectors.toList()); // 모듈화 
+                    .collect(Collectors.toList());  
         
         List<SubwayDTO> subways = new ArrayList<>();
         ClassPathResource resource = new ClassPathResource("static/subway_data.csv");
@@ -62,4 +65,16 @@ public class SubwayServiceImpl implements SubwayService{
             .map(s -> new AveragePeopleDTO(s.getSubway_name(), s.getAvg_people_cnt()))
             .collect(Collectors.toList()); // 모듈화    
      }
+
+    @Override
+    public AveragePeopleDTO findLowestAverageSubway() {
+        AveragePeopleInterface avgPeople = subwayRepository.getLowestAvgSubway().get();
+        return new AveragePeopleDTO(avgPeople.getSubway_name(), avgPeople.getAvg_people_cnt());
+    }
+
+    @Override
+    public PeopleGapDTO findHighestGapSubway() {
+        PeopleGapInterface peopleGap = subwayRepository.getHighestGapSubway().get();
+        return new PeopleGapDTO(peopleGap.getSubway_name(), peopleGap.getPeople_gap());
+    }
 }
