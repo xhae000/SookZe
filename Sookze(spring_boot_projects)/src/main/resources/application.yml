@@ -12,3 +12,8 @@ spring :
         show_sql: true
         hibernate:
             ddl-auto: create
+
+jwt : 
+    Header : IamHeader
+    secret : thisissecretthisissecretthisissecretthisissecretthisissecretthisissecret
+    token-validity-in-seconds : 86400

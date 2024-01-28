@@ -14,12 +14,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 public class SubwayDTO {
-    Long id;
-    int line;   
-    int subwayNum;
-    String subwayName;
-    int peopleCnt;
-    String date;
+    private Long id;
+    private int line;   
+    private int subwayNum;
+    private String subwayName;
+    private int peopleCnt;
+    private String date;
 
     public SubwayDTO(SubwayEntity entity){
         this.id = entity.getId();

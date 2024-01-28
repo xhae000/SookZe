@@ -10,6 +10,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PeopleGapDTO {
-    String subwayName;
-    int people_gap;
+    private String subwayName;
+    private int people_gap;
 }

@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,7 @@ import jakarta.persistence.GenerationType;
 @AllArgsConstructor
 @NoArgsConstructor(access  = AccessLevel.PUBLIC)
 @Builder
+@Table(name = "coupon")
 public class CouponEntity{
 
     @Id

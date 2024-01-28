@@ -17,23 +17,22 @@ public class SubwayEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name  = "id", nullable = false, updatable = false)
-    Long id;
+    private Long id;
 
     @Column(name = "line", nullable = false, updatable = true)
-    int line;   
+    private int line;   
 
     @Column(name = "subway_num", nullable = false, updatable = true)
-    int subwayNum;
+    private int subwayNum;
 
     @Column(name = "subway_name", nullable = false, updatable = true)
-    String subwayName;
+    private String subwayName;
 
     @Column(name = "people_cnt", nullable = false, updatable = false)
-    int peopleCnt;
+    private int peopleCnt;
 
     @Column(name = "date", nullable = false, updatable = false)
-    String date;
-
+    private String date;
     
     @Builder(builderClassName = "builder")
     public SubwayEntity(int line, int subwayNum, String subwayName, int peopleCnt, String date){

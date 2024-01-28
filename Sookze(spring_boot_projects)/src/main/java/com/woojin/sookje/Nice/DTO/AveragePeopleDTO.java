@@ -10,6 +10,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AveragePeopleDTO {
-    String subwayName;
-    int avgPeopleCnt;
+    private String subwayName;
+    private int avgPeopleCnt;
 }
