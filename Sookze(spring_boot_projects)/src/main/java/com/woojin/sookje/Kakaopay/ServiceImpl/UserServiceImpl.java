@@ -3,19 +3,23 @@ package com.woojin.sookje.Kakaopay.ServiceImpl;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.woojin.sookje.Kakaopay.Dto.UserDto;
 import com.woojin.sookje.Kakaopay.Entity.AuthorityEntity;
 import com.woojin.sookje.Kakaopay.Entity.UserEntity;
-import com.woojin.sookje.Kakaopay.Enum.UserDtoType;
-import com.woojin.sookje.Kakaopay.Enum.UserEntityType;
+import com.woojin.sookje.Kakaopay.Jwt.TokenProvider;
 import com.woojin.sookje.Kakaopay.Repository.UserRepository;
 import com.woojin.sookje.Kakaopay.Service.UserService;
 import com.woojin.sookje.Kakaopay.Util.SecurityUtil;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,6 +27,10 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final TokenProvider tokenProvider;
+
+
 
     @Override
     public String signUp(UserDto userDto) {
@@ -38,7 +46,7 @@ public class UserServiceImpl implements UserService{
         UserEntity userEntity = UserEntity.builder()
             .username(userDto.getUsername())
             .password(passwordEncoder.encode(userDto.getPassword()))
-            .authorities(Collections.singleton(authorityEntity))
+            .authority(Collections.singleton(authorityEntity))
             .isActivated(true)
             .build();
         userRepository.save(userEntity);
@@ -54,6 +62,31 @@ public class UserServiceImpl implements UserService{
     @Override
     public Optional<UserEntity> getThisUserWithAuthorities() {
        return userRepository.findOneWithAuthorityByUsername(SecurityUtil.getCurrentUsername().get());
+    }
+
+    @Override
+    public Boolean login(String username, String password, HttpServletResponse res) {
+        UsernamePasswordAuthenticationToken authToken = 
+            new UsernamePasswordAuthenticationToken(username, password);    
+
+        /*  AuthenticationMangager : user 정보 불러오고, pw 대조하는 인증 작업 처리
+            user 정보가 없거나(username not found), pw가 일치하지 않으면 throw exeption,  AuthenticationEntryPoint에서 예외 핸들링 
+        */
+        Authentication authentication = null;
+            authentication = authenticationManagerBuilder.getObject().authenticate(authToken);
+  
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.createToken(authentication);
+        System.out.println("token generated : "+jwt);
+
+        // access token 생성 및 클라이언트 저장 
+        Cookie cookie = new Cookie("ACCESS_TOKEN", jwt);
+        cookie.setHttpOnly(true);  //httponly 옵션 설정
+        cookie.setPath("/"); // 모든 곳에서 쿠키열람이 가능하도록 설정
+        cookie.setMaxAge(60 * 60 * 24); //쿠키 만료시간 설정 (24 h)
+        res.addCookie(cookie);
+
+        return true;
     }
     
 }

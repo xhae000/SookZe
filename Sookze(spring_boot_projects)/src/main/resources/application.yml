@@ -15,5 +15,10 @@ spring :
 
 jwt : 
     Header : IamHeader
-    secret : thisissecretthisissecretthisissecretthisissecretthisissecretthisissecret
+    secret : thisissecretthisissecretthisissecretthisissecretthisissecretthisissecretthisissecretthisissecretthisissecret
     token-validity-in-seconds : 86400
+    access-token-cookie-name : ACCESS_TOKEN
+    authorization-header : AUTHORIZATION
+
+server :
+    port : 8081

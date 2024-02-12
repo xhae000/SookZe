@@ -1,7 +1,5 @@
 package com.woojin.sookje.Kakaopay.ServiceImpl;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 import com.woojin.sookje.Kakaopay.Entity.CouponEntity;

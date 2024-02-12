@@ -1,16 +1,15 @@
 package com.woojin.sookje.Kakaopay.Entity;
 
-import java.util.Collections;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.woojin.sookje.Kakaopay.Dto.UserDto;
-import com.woojin.sookje.Kakaopay.Enum.UserDtoType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -26,26 +25,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Entity
-@Table(name = "user")
+@Table(name = "user_")
 public class UserEntity {
-
-    // public UserEntity(UserDto userDto, UserDtoType type){
-    //     switch (type) {
-    //         case SIGN_UP:
-    //             this.username = userDto.getUsername();
-    //             this.password = userDto.getPassword();
-    //             this.isActivated = true;
-    //             this.authorities = Collections.singleton(
-    //                 AuthorityEntity.builder()
-    //                 .authorityName("ROLE_USER")
-    //                 .build()
-    //             );     
-
-    //             break;
-    //     }
-    // }
-
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     @Column(name = "id", nullable = false, updatable = false, length = 256)
     private Long id;
 
@@ -60,10 +44,10 @@ public class UserEntity {
     @Column(name = "isActivated")
     private boolean isActivated;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable( // JoinTable은 테이블과 테이블 사이에 별도의 조인 테이블을 만들어 양 테이블간의 연관관계를 설정 하는 방법
-            name = "account_authority",
+            name = "user_authority",
             joinColumns = {@JoinColumn(name = "id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority", referencedColumnName = "authority_name")})
-    private Set<AuthorityEntity> authorities;
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    private Set<AuthorityEntity> authority;
 }

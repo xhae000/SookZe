@@ -15,7 +15,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        // 유효한 자격증명을 제공하지 않고 접근하려 할때 401
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+      //  response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "wrong username or password");
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+                                    
+        response.getWriter().write("401 error : ID 혹은 PW 잘못됨.");
     }
+
+
+
 }

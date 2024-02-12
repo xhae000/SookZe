@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.woojin.sookje.Kakaopay.Dto.UserDto;
 import com.woojin.sookje.Kakaopay.Entity.UserEntity;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 
 public interface UserService {
     
@@ -18,4 +20,7 @@ public interface UserService {
 
     @Transactional(readOnly = true)
     public Optional<UserEntity> getThisUserWithAuthorities();
+
+    @Transactional(readOnly = true)
+    public Boolean login(String username, String password, HttpServletResponse res);
 }

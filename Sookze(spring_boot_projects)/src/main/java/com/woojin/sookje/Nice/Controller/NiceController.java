@@ -19,7 +19,7 @@ public class NiceController {
     /**
      * 데이터파일의 각 레코드를 DB에 저장하는 API
      */
-    @GetMapping(value = {"/", "/nice/createDB"})
+    @GetMapping(value = {"/nice", "/nice/createDB"})
     public String createDatabase() throws IOException{
         return subwayService.createSubwayDatabase().toString();
     }

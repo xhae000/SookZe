@@ -27,17 +27,19 @@ public class CustomUserDetailsService implements UserDetailsService{
             .orElseThrow(() -> new UsernameNotFoundException(username + " : not found this username in database."));
         }
 
-    private org.springframework.security.core.userdetails.User createUser(String username, UserEntity user) {
+    private UserDetails createUser(String username, UserEntity user) {
         if (!user.isActivated()) {
             throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
         }
 
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
+        List<GrantedAuthority> grantedAuthorities = user.getAuthority().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
                 .collect(Collectors.toList());
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(),
-                grantedAuthorities);
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .authorities(grantedAuthorities)
+                .build();
     }
 }
