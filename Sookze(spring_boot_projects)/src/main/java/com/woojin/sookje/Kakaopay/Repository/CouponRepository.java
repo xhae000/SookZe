@@ -14,8 +14,14 @@ public interface CouponRepository extends JpaRepository<CouponEntity, Long>{
     public Optional<CouponEntity> findTopByUserIdIsNull();
 
     @Modifying
-    @Query(value = "UPDATE COUPON c SET c.user_Id = :userId WHERE c.id = :couponId", nativeQuery = true)
+    @Query(value = "UPDATE coupon c SET c.user_Id = :userId WHERE c.id = :couponId", nativeQuery = true)
     public void setUserId(@Param("couponId")Long couponId, @Param("userId") Long userId);
 
     public List<Optional<CouponEntity>> findByUserId(Long user_id);
+
+    public Optional<CouponEntity> findByCouponId(String couponId);
+
+    @Modifying
+    @Query(value = "DELETE FROM coupon WHERE coupon_id = :couponId", nativeQuery = true)
+    public void deleteCoupon(@Param("couponId") String couponId);
 }

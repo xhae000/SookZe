@@ -96,4 +96,9 @@ public class UserServiceImpl implements UserService{
         return true;
     }
     
+    @Transactional(readOnly = true)
+    @Override
+    public String getUsernameByUserId(Long userId){
+        return userRepository.findUsernameById(userId);
+    }
 }

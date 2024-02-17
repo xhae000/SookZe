@@ -1,5 +1,6 @@
 package com.woojin.sookje.Kakaopay.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -16,4 +17,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>{
 
     @Query(value = "select u.id from user_ u where u.username = :username", nativeQuery = true)
     public Optional<Long> findUserIdByUsername(@Param("username") String username);
+
+    @Query(value = "select u.username from user_ u where u.id = :id", nativeQuery = true)
+    public String findUsernameById(Long id);
 }

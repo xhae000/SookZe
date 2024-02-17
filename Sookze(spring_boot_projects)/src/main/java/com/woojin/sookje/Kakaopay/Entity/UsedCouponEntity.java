@@ -24,14 +24,13 @@ import jakarta.persistence.GenerationType;
 @NoArgsConstructor(access  = AccessLevel.PUBLIC)
 @Builder
 @Getter
-@Table(name = "coupon")
-public class CouponEntity{
-
-    public CouponEntity(UsedCouponEntity usedCouponEntity){
-        this.id = usedCouponEntity.getId();
-        this.userId = usedCouponEntity.getUserId();
-        this.couponId = usedCouponEntity.getCouponId();
-        this.creationDate = usedCouponEntity.getCreationDate();
+@Table(name = "used_coupon")
+public class UsedCouponEntity{
+    public UsedCouponEntity(CouponEntity unusedCoupon){
+        this.id = unusedCoupon.getId();
+        this.creationDate = unusedCoupon.getCreationDate();
+        this.userId = unusedCoupon.getUserId();
+        this.couponId = unusedCoupon.getCouponId();
     }
 
     @Id
@@ -39,16 +38,14 @@ public class CouponEntity{
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    @Column(name = "user_id", updatable = true, nullable = true)
-    @Builder.Default
-    private Long userId = null;
+    @Column(name = "user_id", updatable = true, nullable = false)
+    private Long userId;
 
     /**
      *  쿠폰 번호
      */
     @Column(name = "coupon_id", updatable = false, nullable = false)
-    @Builder.Default
-    private String couponId = UUID.randomUUID().toString();
+    private String couponId;
 
     @Column(name = "creation_date",updatable = false, nullable = false)
     @CreationTimestamp
