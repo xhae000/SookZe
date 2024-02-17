@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
@@ -26,6 +27,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "user_")
+@ToString//del
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

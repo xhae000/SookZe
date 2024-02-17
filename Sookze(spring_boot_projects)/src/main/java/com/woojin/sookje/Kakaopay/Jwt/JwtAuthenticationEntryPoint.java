@@ -15,12 +15,12 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-      //  response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "wrong username or password");
+      //  response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
                                     
-        response.getWriter().write("401 error : ID 혹은 PW 잘못됨.");
+        response.getWriter().write("401 error");
     }
 
 

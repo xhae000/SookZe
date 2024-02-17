@@ -51,7 +51,7 @@ public class SecurityConfig {
         )
 
         .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-            .requestMatchers("/kakaopay/test").authenticated()    
+            .requestMatchers("/kakaopay/coupon/**").authenticated()    
             .anyRequest().permitAll()
         )
         .apply(new JwtConfig(tokenProvider));

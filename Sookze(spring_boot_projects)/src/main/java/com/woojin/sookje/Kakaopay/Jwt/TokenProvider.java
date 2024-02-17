@@ -39,7 +39,7 @@ public class TokenProvider implements InitializingBean{
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = secretKey.getBytes();
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -55,7 +55,7 @@ public class TokenProvider implements InitializingBean{
         return Jwts.builder()
             .setSubject(authentication.getName())
             .claim("auth", authorities)
-            .signWith(key, SignatureAlgorithm.HS512)
+            .signWith(key, SignatureAlgorithm.HS256)
             .setExpiration(validity)
             .compact();
     }
@@ -74,16 +74,20 @@ public class TokenProvider implements InitializingBean{
                 .collect(Collectors.toList());
     
         User principal = new User(claims.getSubject(),"",authorities);
-        
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     public boolean valdiateToken(String token){
+        System.out.println("token in cookie ==============>"+token);
+
         try{
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            System.out.println("잘못된 JWT 서명입니다.");
+        } catch (io.jsonwebtoken.security.SecurityException e) {
+            System.out.println("잘못된 JWT 서명입니다.1");
+        }
+        catch(MalformedJwtException e){
+            e.printStackTrace();
         } catch (ExpiredJwtException e) {     
             System.out.println("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {

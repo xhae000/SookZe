@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.woojin.sookje.Kakaopay.Dto.UserDto;
 import com.woojin.sookje.Kakaopay.Entity.AuthorityEntity;
@@ -31,11 +32,12 @@ public class UserServiceImpl implements UserService{
     private final TokenProvider tokenProvider;
 
 
-
     @Override
+    @Transactional(readOnly = false)
     public String signUp(UserDto userDto) {
         String username = userDto.getUsername();
             if (userRepository.findOneWithAuthorityByUsername(username).orElse(null) != null) {
+                // 중복 username
                 throw new RuntimeException(username + " : already existed username.");
             }
 
@@ -55,16 +57,19 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<UserEntity> getUserWithAuthorities(String username) {
         return userRepository.findOneWithAuthorityByUsername(username);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<UserEntity> getThisUserWithAuthorities() {
        return userRepository.findOneWithAuthorityByUsername(SecurityUtil.getCurrentUsername().get());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean login(String username, String password, HttpServletResponse res) {
         UsernamePasswordAuthenticationToken authToken = 
             new UsernamePasswordAuthenticationToken(username, password);    
@@ -80,7 +85,9 @@ public class UserServiceImpl implements UserService{
         System.out.println("token generated : "+jwt);
 
         // access token 생성 및 클라이언트 저장 
-        Cookie cookie = new Cookie("ACCESS_TOKEN", jwt);
+        Cookie cookie;
+        cookie = new Cookie("ACCESS_TOKEN", jwt);
+
         cookie.setHttpOnly(true);  //httponly 옵션 설정
         cookie.setPath("/"); // 모든 곳에서 쿠키열람이 가능하도록 설정
         cookie.setMaxAge(60 * 60 * 24); //쿠키 만료시간 설정 (24 h)

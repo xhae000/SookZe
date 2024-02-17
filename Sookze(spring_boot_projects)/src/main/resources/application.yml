@@ -14,11 +14,8 @@ spring :
             ddl-auto: create
 
 jwt : 
-    Header : IamHeader
-    secret : thisissecretthisissecretthisissecretthisissecretthisissecretthisissecretthisissecretthisissecretthisissecret
+    secret : hellothisissecretkeyhahaahhaah!!!!123000
     token-validity-in-seconds : 86400
-    access-token-cookie-name : ACCESS_TOKEN
-    authorization-header : AUTHORIZATION
 
 server :
     port : 8081

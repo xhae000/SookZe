@@ -1,6 +1,7 @@
 package com.woojin.sookje.Kakaopay.Jwt;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -16,12 +17,11 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
+import java.net.URLDecoder;
+
+
 @RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
-    @Value("${jwt.authorization-header}")
-    public static String AUTHORIZATION_HEADER;
-    @Value("${jwt.access-token-cookie-name}")
-    private static String ACCESS_TOKEN_COOKIE_NAME;
     private final TokenProvider tokenProvider;
 
 
@@ -40,15 +40,14 @@ public class JwtFilter extends GenericFilterBean {
     private String resolveToken(ServletRequest request) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         Cookie cookies[] = httpServletRequest.getCookies();
-        String bearerToken = null;
+        String token = null;
 
         for(int i=0; i < (cookies == null ? 0 : cookies.length); i++){
-            if(cookies[i].getName() == ACCESS_TOKEN_COOKIE_NAME)
-                bearerToken = cookies[i].getValue();
+            if(cookies[i].getName().equals("ACCESS_TOKEN"))
+                token =  cookies[i].getValue();
         }
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) 
-            return bearerToken.substring(7);
-        return null;
+     
+        return StringUtils.hasText(token)? token : null;
     }
     
 }
