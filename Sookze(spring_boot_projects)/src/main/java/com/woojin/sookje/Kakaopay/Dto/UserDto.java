@@ -26,7 +26,7 @@ public class UserDto {
 
     private Long id;
     private String username;
-    // consider only sirialization (java to json) 
+    // 직렬화(java to json)만 허용  
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 }

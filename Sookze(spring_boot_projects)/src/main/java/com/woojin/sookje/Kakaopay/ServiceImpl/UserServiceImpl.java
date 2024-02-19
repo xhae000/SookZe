@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
+    private final SecurityUtil securityUtil;
 
 
     @Override
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(readOnly = true)
     public Optional<UserEntity> getThisUserWithAuthorities() {
-       return userRepository.findOneWithAuthorityByUsername(SecurityUtil.getCurrentUsername().get());
+       return userRepository.findOneWithAuthorityByUsername(securityUtil.getCurrentUsername().get());
     }
 
     @Override
@@ -82,17 +83,8 @@ public class UserServiceImpl implements UserService{
   
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication);
-        System.out.println("token generated : "+jwt);
 
-        // access token 생성 및 클라이언트 저장 
-        Cookie cookie;
-        cookie = new Cookie("ACCESS_TOKEN", jwt);
-
-        cookie.setHttpOnly(true);  //httponly 옵션 설정
-        cookie.setPath("/"); // 모든 곳에서 쿠키열람이 가능하도록 설정
-        cookie.setMaxAge(60 * 60 * 24); //쿠키 만료시간 설정 (24 h)
-        res.addCookie(cookie);
-
+        res.addCookie(createAccessTokenCookie(jwt));
         return true;
     }
     
@@ -100,5 +92,17 @@ public class UserServiceImpl implements UserService{
     @Override
     public String getUsernameByUserId(Long userId){
         return userRepository.findUsernameById(userId);
+    }
+
+    private Cookie createAccessTokenCookie(String jwt){
+        // access token 생성 및 클라이언트 저장 
+        Cookie cookie;
+        cookie = new Cookie("ACCESS_TOKEN", jwt);
+
+        cookie.setHttpOnly(true);  //httponly 옵션 설정
+        cookie.setPath("/"); // 모든 곳에서 쿠키열람이 가능하도록 설정
+        cookie.setMaxAge(60 * 60 * 24); //쿠키 만료시간 설정 (24 h)
+
+        return cookie;
     }
 }

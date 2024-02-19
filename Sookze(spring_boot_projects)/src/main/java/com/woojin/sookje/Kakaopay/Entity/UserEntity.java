@@ -19,7 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
@@ -27,7 +26,6 @@ import lombok.ToString;
 @Builder
 @Entity
 @Table(name = "user_")
-@ToString//del
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +40,6 @@ public class UserEntity {
     @JsonIgnore
     private String password;
 
-    @JsonIgnore
     @Column(name = "isActivated")
     private boolean isActivated;
 

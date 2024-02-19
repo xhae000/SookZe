@@ -26,7 +26,6 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    // PasswordEncoder는 BCryptPasswordEncoder를 사용
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

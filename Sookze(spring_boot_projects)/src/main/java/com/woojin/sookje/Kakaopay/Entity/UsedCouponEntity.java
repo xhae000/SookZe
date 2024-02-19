@@ -1,7 +1,6 @@
 package com.woojin.sookje.Kakaopay.Entity;
 
 import java.sql.Date;
-import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -14,14 +13,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 @Entity
-@ToString
 @AllArgsConstructor
-@NoArgsConstructor(access  = AccessLevel.PUBLIC)
+@NoArgsConstructor(access  = AccessLevel.PROTECTED)
 @Builder
 @Getter
 @Table(name = "used_coupon")

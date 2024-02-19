@@ -14,19 +14,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 @Entity
-@ToString
 @AllArgsConstructor
-@NoArgsConstructor(access  = AccessLevel.PUBLIC)
+@NoArgsConstructor(access  = AccessLevel.PUBLIC) 
 @Builder
 @Getter
 @Table(name = "coupon")
 public class CouponEntity{
 
+    /**
+     *  쿠폰 취소 시 [사용한 쿠폰] -> [쿠폰]으로 변환하기 위한 생성자
+     */
     public CouponEntity(UsedCouponEntity usedCouponEntity){
         this.id = usedCouponEntity.getId();
         this.userId = usedCouponEntity.getUserId();

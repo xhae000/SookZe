@@ -24,8 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CouponServiceImpl implements CouponService {
     private final CouponRepository couponRepository;
-    private final UserRepository userRepository;
     private final UsedCouponRepository usedCouponRepository;
+    private final SecurityUtil securityUtil;
 
     @Override
     public void createCoupons(int N) {
@@ -37,20 +37,22 @@ public class CouponServiceImpl implements CouponService {
     @Transactional
     public String issueCoupon(){
         Optional<CouponEntity> OptionalNotIssuedCoupon = couponRepository.findTopByUserIdIsNull();
-        if(OptionalNotIssuedCoupon.isEmpty()) return "쿠폰을 먼저 생성해주세요.";
+
+        if(OptionalNotIssuedCoupon.isEmpty()) 
+            return "쿠폰을 먼저 생성해주세요.";
 
         CouponEntity notIssuedCoupon = OptionalNotIssuedCoupon.get();
+        Long currentUserId = securityUtil.getCurrentUserId();
 
-        Long currentUserId = userRepository.findUserIdByUsername(SecurityUtil.getCurrentUsername().get()).get();
         couponRepository.setUserId(notIssuedCoupon.getId(), currentUserId);
-
         return notIssuedCoupon.getCouponId();
     }
     
     @Transactional(readOnly=true)
     @Override
     public List<String> getMyCouponIds(){
-        Long userId = userRepository.findUserIdByUsername(SecurityUtil.getCurrentUsername().get()).get();
+        Long userId = securityUtil.getCurrentUserId();
+
         return couponRepository.findByUserId(userId).stream()
             .filter(entity -> !isExpiredCoupon(entity.get()))
             .map(entity -> entity.get().getCouponId())
@@ -59,7 +61,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional(readOnly=true)
-    public boolean isExpiredCoupon(String couponId){ // input : couponId
+    public boolean isExpiredCoupon(String couponId){ // 쿠폰 아이디 들어왔을 때
         // 쿠폰 유효기간 : 7일 
         Optional<CouponEntity> optionalCouponEntity = couponRepository.findByCouponId(couponId);
         if(optionalCouponEntity.isEmpty()) 
@@ -71,7 +73,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional(readOnly=true)
-    public boolean isExpiredCoupon(CouponEntity couponEntity){ // input : couponEntity
+    public boolean isExpiredCoupon(CouponEntity couponEntity){ // 쿠폰 엔티티 들어왔을때
         // 쿠폰 유효기간 : 7일 
         Long dateDifference = getCouponExpirationDateDifference(couponEntity.getCreationDate());
 
@@ -90,10 +92,14 @@ public class CouponServiceImpl implements CouponService {
     @Override
     @Transactional(readOnly=true)
     public List<CouponDto> getCouponsExpiredToday(){
-        return couponRepository.findAll().stream()
-            .filter(c -> Math.floor(getCouponExpirationDateDifference(c.getCreationDate())) == 8 
-                && c.getUserId() == userRepository.findUserIdByUsername(SecurityUtil.getCurrentUsername().get()).get()) // todo : repository에서 일단 자기꺼만 가져오기 ..
-            .map(CouponDto::new)
+        List<Optional<CouponEntity>> optionalCoupons = couponRepository.findByUserId(securityUtil.getCurrentUserId());
+        
+        if (optionalCoupons.isEmpty())
+            return null;
+
+        return optionalCoupons.stream()
+            .filter(c -> Math.floor(getCouponExpirationDateDifference(c.get().getCreationDate())) == 8)
+            .map(c -> new CouponDto(c.get()))
             .toList();
     }
 
@@ -115,7 +121,7 @@ public class CouponServiceImpl implements CouponService {
         }
         CouponEntity coupon = optionalCoupon.get();
 
-        if(coupon.getUserId() != userRepository.findUserIdByUsername(SecurityUtil.getCurrentUsername().get()).get()){ // 함수로 만들자 user id 얻는거
+        if(coupon.getUserId() != securityUtil.getCurrentUserId()){ 
             return false;
         }
         if(isExpiredCoupon(coupon.getCouponId())){
@@ -133,7 +139,7 @@ public class CouponServiceImpl implements CouponService {
     @Transactional(readOnly = true)
     @Override
     public List<String> getUsedCouponIds(){
-        List<UsedCouponEntity> usedCoupons = usedCouponRepository.getMyUsedCoupons(userRepository.findUserIdByUsername(SecurityUtil.getCurrentUsername().get()).get());
+        List<UsedCouponEntity> usedCoupons = usedCouponRepository.getMyUsedCoupons(securityUtil.getCurrentUserId());
 
         return usedCoupons.stream()
             .map(uC -> uC.getCouponId())

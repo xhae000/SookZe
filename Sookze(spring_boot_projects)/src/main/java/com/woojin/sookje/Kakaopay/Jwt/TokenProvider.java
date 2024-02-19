@@ -21,7 +21,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 @Component
@@ -78,8 +77,6 @@ public class TokenProvider implements InitializingBean{
     }
 
     public boolean valdiateToken(String token){
-        System.out.println("token in cookie ==============>"+token);
-
         try{
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;

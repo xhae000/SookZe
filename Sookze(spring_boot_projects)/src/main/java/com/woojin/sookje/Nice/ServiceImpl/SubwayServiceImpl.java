@@ -63,7 +63,7 @@ public class SubwayServiceImpl implements SubwayService{
     public List<AveragePeopleDTO> findMost10AvgSubway() {
         return subwayRepository.findMost10Subways().get().stream()
             .map(s -> new AveragePeopleDTO(s.getSubway_name(), s.getAvg_people_cnt()))
-            .collect(Collectors.toList()); // 모듈화    
+            .collect(Collectors.toList());  
      }
 
     @Override

@@ -1,9 +1,7 @@
 package com.woojin.sookje.Kakaopay.Jwt;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -17,13 +15,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
-import java.net.URLDecoder;
-
 
 @RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
     private final TokenProvider tokenProvider;
-
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException{
